@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<style>
+			canvas{
+				background-color:white;
+				border-color:black;
+				border-width:1px;
+				border-style:solid;
+			}
+		</style>
+		<script src="MochoUtils/mocho.load.js"></script>
+	</head>
+	<body>
+		<canvas id="canvas" width='200' height='200'></canvas>
+		<script>
+			function test(){
+				var canvas = document.getElementById("canvas");
+				var ctx = canvas.getContext("2d");
+				ctx.fillStyle = "#00FF00";
+				ctx.globalAlpha = 1;
+				var sheetImg;
+				var tileSheet;
+				var animationFrameSet;
+				var animation;
+				var i=0;
+				new Mocho.Loop(
+					function(ready){
+						tileSheet;
+						Mocho.loadImage("Test/sheet.png",
+							function(img){
+								tileSheet=new TileSheet(img, img.width, img.height, 16, 16);
+								animationFrameSet = new AnimationFrameSet(tileSheet, 26, 6, "repeat");
+								animation = new Animation(animationFrameSet,200);
+								sheetImg = animation.getCurrentFrame();
+								
+								ready();
+							}
+						);
+					},
+					function(dt){
+						animation.update(dt);
+						sheetImg=animation.getCurrentFrame();
+					},
+					function(){
+						ctx.clearRect(0,0,canvas.width,canvas.height);
+						//ctx.drawImage(sheetImg,0,0);
+						sheetImg.draw(ctx,0,0);
+					},
+					60,
+					false
+				).run();
+			}
+			
+			Mocho.loadScripts([
+				"MochoUtils/mocho.math.js",
+				"MochoUtils/mocho.loop.js",
+				"MochoUtils/mocho.animation.js"
+			],test);
+			
+		</script>
+	</body>
+</html>
