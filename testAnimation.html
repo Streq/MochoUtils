@@ -19,33 +19,71 @@
 				var ctx = canvas.getContext("2d");
 				ctx.fillStyle = "#00FF00";
 				ctx.globalAlpha = 1;
-				var sheetImg;
-				var tileSheet;
-				var animationFrameSet;
-				var animation;
+				
+				var animationPunch;
+				var animationRunOld;
+				var animationRun;
+				var animationKick;
 				var i=0;
+				var frameTime = 500;
 				new Mocho.Loop(
 					function(ready){
-						tileSheet;
 						Mocho.loadImage("Test/sheet.png",
 							function(img){
-								tileSheet=new TileSheet(img, img.width, img.height, 16, 16);
-								animationFrameSet = new AnimationFrameSet(tileSheet, 26, 6, "repeat");
-								animation = new Animation(animationFrameSet,200);
-								sheetImg = animation.getCurrentFrame();
-								
+								var tileSheet = new TileSheet(img, img.width, img.height, 16, 16);
+								animationPunch = new Animation
+									( new AnimationFrameSet
+									 	( tileSheet
+										, 3*8 + 2
+										, 6
+										, "repeat"
+										)
+									, frameTime
+									);
+								animationRunOld = new Animation
+									( new AnimationFrameSet
+									 	( tileSheet
+										, 1*8
+										, 4
+										, "repeat"
+										)
+									, frameTime
+									);
+								animationKick = new Animation
+									( new AnimationFrameSet
+									 	( tileSheet
+										, 6*8
+										, 3
+										, "boomerang"
+										)
+									, frameTime
+									);
+								animationRun = new Animation
+									( new AnimationFrameSet
+									 	( tileSheet
+										, 7*8
+										, 6
+										, "repeat"
+										)
+									, frameTime
+									);
 								ready();
 							}
 						);
 					},
 					function(dt){
-						animation.update(dt);
-						sheetImg=animation.getCurrentFrame();
+						animationPunch.update(dt);
+						animationKick.update(dt);
+						animationRun.update(dt);
+						animationRunOld.update(dt);
 					},
 					function(){
 						ctx.clearRect(0,0,canvas.width,canvas.height);
 						//ctx.drawImage(sheetImg,0,0);
-						sheetImg.draw(ctx,0,0);
+						animationPunch.getCurrentFrame().draw(ctx,0,0);
+						animationKick.getCurrentFrame().draw(ctx,32,0);
+						animationRun.getCurrentFrame().draw(ctx,64,0);
+						animationRunOld.getCurrentFrame().draw(ctx,96,0);
 					},
 					60,
 					false

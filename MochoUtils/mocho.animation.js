@@ -153,7 +153,10 @@ function AnimationFrameSet(spriteSheet, startIndex, frames, type){
 	}
 }
 AnimationFrameSet.prototype.getAt = function(index){
-	return this.sheet.getAt(this.indexer(this.sheet.length,this.startIndex+index%this.frames));
+	return this.sheet.getAt(
+		this.startIndex
+		+this.indexer(this.frames,this.startIndex + index)
+	);
 }
 /*
 Animation
