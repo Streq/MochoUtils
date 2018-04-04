@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<script src="/MochoUtils/mocho.load.js"></script>
+		<script src="/MochoUtils/mocho.loop.js"></script>
+		
+	</head>
+	<body>
+		<div id="display"></div>
+		<script>
+			function display(something){
+				document.getElementById("display").innerHTML += something + '<br>';
+			}
+
+			function testLoadScript(){
+				var srcs = 
+					["Assets/JS/load1.js"
+					,"Assets/JS/load2.js"
+					,"Assets/JS/load3.js"];
+				
+				var clock=new Mocho.Clock();
+				clock.restart();
+				Mocho.loadScripts(srcs,
+					function(){
+						var time = clock.restart();
+						display("tiempo tomado:"+time);
+						
+					}
+				);
+			}
+			
+			function testLoadJson(){
+				var src = "Assets/JSON/example.json";
+				Mocho.loadJSON(src,
+					function(json){
+						display(JSON.stringify(json));
+					}
+				);
+			}
+			window.onload=function(){
+				testLoadScript()
+				testLoadJson();
+			}
+			
+		</script>
+	</body>
+</html>

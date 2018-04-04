@@ -22,5 +22,26 @@ var Mocho =
 	mod.clamp = function clamp(min,max,val){
 		return Math.min(max, Math.max(min, val));
 	}
+	
+	mod.offsetNoRepeat = function offsetNoRepeat(size,index){
+		//clamp
+		return mod.clamp(0,size-1,index);
+	}
+
+	mod.offsetRepeat = function offsetRepeat(size,index){
+		//wrap
+		return mod.modulo(size,index);
+	}
+
+	mod.offsetBoomerang = function offsetBoomerang(size,index){
+		//oscillate
+		var size2 = size*2 - 2;
+		var index2 = mod.modulo(size2,index);
+		return (index2 > size-1)
+			? size2 - index2
+			: index2;
+	}
+	
+	
 	return mod;
 })(Mocho||{});

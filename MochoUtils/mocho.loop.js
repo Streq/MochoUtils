@@ -7,7 +7,7 @@ var Mocho = (function(mod){
 			var ret = now - this.lastReset;
 			this.lastReset = now;
 			return ret;
-		}
+		};
 	}
 
 	//Loop class
@@ -19,13 +19,13 @@ var Mocho = (function(mod){
 		this.renderFPS = renderFPS;
 		this.timeFactor = 1;
 		this.timeSinceLastUpdate = 0;
-	};
+	}
 
 	Loop.prototype.setFPS = function(x){
 		this.frameTime = 1000/x;
 		this.frameSecs = 1/x;
 		this.fps = x;
-	}
+	};
 	Loop.prototype.run = function(){
 		let onload = function(){			
 			this.clock = new Clock();

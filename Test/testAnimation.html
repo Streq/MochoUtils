@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<style>
+			canvas{
+				background-color:white;
+				border-color:black;
+				border-width:1px;
+				border-style:solid;
+			}
+		</style>
+		<script src="/MochoUtils/mocho.load.js"></script>
+	</head>
+	<body>
+		<canvas id="canvas" width='200' height='200'></canvas>
+		<script>
+			function run(){
+				function test(){
+					var canvas = document.getElementById("canvas");
+					var ctx = canvas.getContext("2d");
+					ctx.fillStyle = "#00FF00";
+					ctx.globalAlpha = 1;
+
+					var animationPunch;
+					var animationRunOld;
+					var animationRun;
+					var animationKick;
+					var i=0;
+					var frameTime = 100;
+					new Mocho.Loop(
+						function(ready){//initialize
+							Mocho.loadImage("Assets/Images/sheet.png",
+								function(img){
+									var tileSheet = new Mocho.TileSheet(img, img.width, img.height, 16, 16);
+									animationPunch = new Mocho.Animation
+										( new Mocho.AnimationFrameSet
+											( tileSheet
+											, 3*8 + 2
+											, 6
+											, "repeat"
+											)
+										, frameTime
+										);
+									animationRunOld = new Mocho.Animation
+										( new Mocho.AnimationFrameSet
+											( tileSheet
+											, 1*8
+											, 4
+											, "repeat"
+											)
+										, frameTime
+										);
+									animationKick = new Mocho.Animation
+										( new Mocho.AnimationFrameSet
+											( tileSheet
+											, 6*8
+											, 3
+											, "boomerang"
+											)
+										, frameTime
+										);
+									animationRun = new Mocho.Animation
+										( new Mocho.AnimationFrameSet
+											( tileSheet
+											, 7*8
+											, 6
+											, "repeat"
+											)
+										, frameTime
+										);
+									ready();
+								}
+							);
+						},
+						function(dt){//update
+							animationPunch.update(dt);
+							animationKick.update(dt);
+							animationRun.update(dt);
+							animationRunOld.update(dt);
+						},
+						function(){//render
+							ctx.clearRect(0,0,canvas.width,canvas.height);
+							animationPunch.getCurrentFrame().draw(ctx,0,0);
+							animationKick.getCurrentFrame().draw(ctx,32,0);
+							animationRun.getCurrentFrame().draw(ctx,64,0);
+							animationRunOld.getCurrentFrame().draw(ctx,96,0);
+						},
+						60,
+						false
+					).run();
+				}
+				Mocho.loadScripts([
+					"/MochoUtils/mocho.math.js",
+					"/MochoUtils/mocho.loop.js",
+					"/MochoUtils/mocho.animation.js"
+				],test);
+			}
+			
+			window.onload = run;
+		</script>
+	</body>
+</html>
