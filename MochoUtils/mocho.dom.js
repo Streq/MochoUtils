@@ -20,7 +20,7 @@ var Mocho = (function(mod){
 	function insertAfter(el, referenceNode) {
 		referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
 	}
-	mod.getCurrentScriptElement = getCurrentScriptElement;
+	mod.getCurrentScript = getCurrentScript;
 	mod.insertBefore = insertBefore;
 	mod.insertAfter = insertAfter;
 	mod.getScriptPath = getScriptPath;
