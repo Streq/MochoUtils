@@ -1,5 +1,4 @@
 (function(){
-	var containerElement=Program.containerElement;
 	
 	function runThisThang(){
 		var canvas = document.createElement("canvas");
@@ -11,7 +10,7 @@
 		
 		canvas.width='200';
 		canvas.height='200';
-		containerElement.appendChild(canvas);
+		document.body.appendChild(canvas);
 		
 		var ctx = canvas.getContext("2d");
 		ctx.fillStyle = "#00FF00";

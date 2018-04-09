@@ -1,4 +1,4 @@
-var Program = (function(mod){
+(function(){
 	//get parameters
 	var currentScript = document.currentScript;
 	var scriptPath = 
@@ -8,18 +8,34 @@ var Program = (function(mod){
 		})();
 	var rootPath = currentScript.getAttribute('root-path') || scriptPath;
 	var runSrc = currentScript.getAttribute("run-src");
-	var containerElement = document.createElement("div");
-	currentScript.parentElement.insertBefore(containerElement,currentScript);
+	var height = currentScript.getAttribute("height");
+	var width = currentScript.getAttribute("width");
 	
-	mod.baseDir = rootPath;
-	mod.containerElement = containerElement;
-	mod.scriptElement = currentScript;
-	mod.src = runSrc;
-	return mod;
-})(Program||{});
+	var html = `
+	<body>
+		<script>
+			var Program = (function(mod){
+				//get parameters
+				mod.baseDir =  "` + rootPath + `";
+				return mod;
+			})(Program||{});
 
-(function (){
-	var script = document.createElement("script");
-	script.src = Program.src;
-	document.head.appendChild(script);
+			(function (){
+				var script = document.createElement("script");
+				script.src = "` + runSrc + `";
+				document.head.appendChild(script);
+			})();
+		</script>
+	</body>
+	`
+	var iframe = document.createElement("iframe");
+	iframe.src = 'data:text/html;charset=utf-8,' + encodeURI(html);
+	iframe.style.border="none";
+	iframe.style.width=width;
+	iframe.style.height=height;
+	
+	currentScript.parentElement.insertBefore(iframe,currentScript);
+	
 })();
+
+	
