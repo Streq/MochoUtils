@@ -12,6 +12,7 @@
 	var width = currentScript.getAttribute("width");
 	
 	var html = `
+	<head></head>
 	<body>
 		<script>
 			var Program = (function(mod){
