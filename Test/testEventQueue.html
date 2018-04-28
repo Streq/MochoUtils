@@ -1,0 +1,68 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<canvas id="canvas" tabindex="1"></canvas>
+		<script src="/MochoUtils/mocho.load.js"></script>
+		<script src="/MochoUtils/mocho.math.js"></script>
+		<script src="/MochoUtils/mocho.dom.js"></script>
+		<script src="/MochoUtils/mocho.loop.js"></script>
+		<script src="/MochoUtils/mocho.structs.js"></script>
+		<script src="/MochoUtils/mocho.input.js"></script>
+		<script src="Assets/JS/Dude.js"></script>
+		<script>
+			var Game = (function(mod){
+				var player = new Dude(0,0);
+				var canvas = document.getElementById("canvas");
+				var ctx = canvas.getContext("2d");
+				
+				var left = false;
+				var right = false;
+				
+				var loop = new Mocho.Loop(
+					function(onload){
+						mod.eventQueue = Mocho.makeEventQueue(document,["keydown","keyup"]);
+						
+						onload();
+					},
+					function(dt){
+						mod.eventQueue.swapBuffer();
+						while(!mod.eventQueue.isEmpty()){
+							var event = mod.eventQueue.dequeue();
+							var pressed = false;
+							if(event.type === "keydown"){
+								pressed = true;
+							}
+							else if(event.type!=="keyup"){
+								continue;
+							}
+							switch(event.keyCode){
+								case 37:
+									left = pressed;
+									break;
+								case 39:
+									right = pressed;
+									break;
+							}
+						}
+						if(left){
+							player.handleInput(INPUT.LEFT);
+						}
+						if(right){
+							player.handleInput(INPUT.RIGHT);			
+						}
+						player.update(dt);
+					},
+					function(){
+						ctx.clearRect(0,0,canvas.width,canvas.height);
+						ctx.fillRect(player.x,player.y,16,16);
+					}
+				);
+				
+				loop.run();
+				
+				return mod;
+			})(Game||{})
+		</script>
+	</body>
+</html>

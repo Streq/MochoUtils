@@ -10,12 +10,22 @@ var Mocho = (function(mod){
 		};
 	}
 
-	//Loop class
-	function Loop(initFunction, updateFunction, renderFunction, FPS, renderFPS){
+	/**
+	 * Loop class
+	 * @constructor
+	 * @param {function(function onload)} init - sets everything up,
+	 *        it needs to call the onload function when it's done.
+	 * @param {function(float dt)} update - updates according to dt.
+	 * @param {function()} render - render callback.
+	 * @param {int} FPS - frames per second, determines how many times
+	 *        update and render will be called per second.
+	 * @param {bool} renderFPS - whether to render the darn fps or nah
+	 */
+	function Loop(init, update, render, FPS, renderFPS){
 		this.setFPS(FPS || 60);
-		this.init = initFunction;
-		this.update = updateFunction;
-		this.render = renderFunction;
+		this.init = init;
+		this.update = update;
+		this.render = render;
 		this.renderFPS = renderFPS;
 		this.timeFactor = 1;
 		this.timeSinceLastUpdate = 0;
@@ -53,4 +63,5 @@ var Mocho = (function(mod){
 	mod.Loop = Loop;
 	mod.Clock = Clock;
 	return mod;
+	
 })(Mocho||{});
