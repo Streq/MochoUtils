@@ -1,0 +1,135 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<canvas id="canvas" tabindex="1" width="400" height="400"></canvas>
+		<script src="/MochoUtils/mocho.load.js"></script>
+		<script src="/MochoUtils/mocho.math.js"></script>
+		<script src="/MochoUtils/mocho.dom.js"></script>
+		<script src="/MochoUtils/mocho.loop.js"></script>
+		<script src="/MochoUtils/mocho.structs.js"></script>
+		<script src="/MochoUtils/mocho.input.js"></script>
+		<script src="/MochoUtils/mocho.collision.js"></script>
+		<script>
+			var Game = (function(mod){
+				var canvas = document.getElementById("canvas");
+				var ctx = canvas.getContext("2d");
+				
+				var left = false;
+				var right = false;
+				var down = false;
+				var up = false;
+				
+				var collided = false;
+				
+				mod.speed = 100/1000;
+				var player = {x:30, y:30, w:10, h:10, vx:0, vy:0};
+				var walls = [
+								{x:1, y:1, w:100, h:5},
+								{x:80, y:30, w:10, h:20},
+								{x:140, y:60, w:40, h:40},
+								{x:300, y:20, w:70, h:20},
+								{x:240, y:330, w:50, h:40}
+							];
+				
+				var loop = new Mocho.Loop(
+					function(onload){
+						mod.eventQueue = Mocho.makeEventQueue(document,["keydown","keyup"]);
+						onload();
+					},
+					function(dt){
+						mod.eventQueue.swapBuffer();
+						while(!mod.eventQueue.isEmpty()){
+							var event = mod.eventQueue.dequeue();
+							var pressed = false;
+							if(event.type === "keydown"){
+								pressed = true;
+							}
+							else if(event.type!=="keyup"){
+								continue;
+							}
+							switch(event.keyCode){
+								case 65:
+									left = pressed;
+									break;
+								case 87:
+									up = pressed;
+									break;
+								case 68:
+									right = pressed;
+									break;
+								case 83:
+									down = pressed;
+									break;
+								case 67:
+									right = pressed;
+									down = pressed;
+									break;
+								case 90:
+									left = pressed;
+									down = pressed;
+									break;
+								case 69:
+									right = pressed;
+									up = pressed;
+									break;
+								case 81:
+									left = pressed;
+									up = pressed;
+									break;
+								case 82:
+									player.x=0;
+									player.y=0;
+									break;
+							}
+						}
+						var dir = {x:right-left, y:down-up};
+						if(dir.x && dir.y){
+							dir.x *= 0.70710678118;
+							dir.y *= 0.70710678118;
+						}
+						player.vx=dir.x*mod.speed;
+						player.vy=dir.y*mod.speed;
+						player.x+=player.vx * dt;
+						player.y+=player.vy * dt;
+						collided = false;
+						walls.forEach(function(each){
+							each.collided = false;
+							if(Mocho.Collision.boxBoxMoving(
+								player.x, player.y, player.w, player.h,
+								each.x, each.y, each.w, each.h,
+								-player.vx*dt, -player.vy*dt))
+							{
+								each.collided=true;
+								collided = true;
+							}
+						});
+					},
+					function(){
+						ctx.clearRect(0,0,canvas.width,canvas.height);
+						
+						if(collided)
+							ctx.fillStyle="red";
+						else
+							ctx.fillStyle="green";
+						
+						ctx.fillRect(player.x,player.y,player.w,player.h);
+						
+						walls.forEach(function(each){
+							if(each.collided)
+								ctx.fillStyle="cyan";
+							else
+								ctx.fillStyle="blue";
+						
+							ctx.fillRect(each.x,each.y,each.w,each.h);
+						})
+					}
+				);
+				
+				loop.run();
+				
+				return mod;
+			})(Game||{})
+		</script>
+	</body>
+</html>

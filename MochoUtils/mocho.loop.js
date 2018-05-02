@@ -19,7 +19,7 @@ var Mocho = (function(mod){
 	 * @param {function()} render - render callback.
 	 * @param {int} FPS - frames per second, determines how many times
 	 *        update and render will be called per second.
-	 * @param {bool} renderFPS - whether to render the darn fps or nah
+	 * @param {boolean} renderFPS - whether to render the darn fps or nah
 	 */
 	function Loop(init, update, render, FPS, renderFPS){
 		this.setFPS(FPS || 60);
