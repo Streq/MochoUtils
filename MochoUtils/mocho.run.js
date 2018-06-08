@@ -1,3 +1,4 @@
+"use strict";
 (function(){
 	//get parameters
 	var currentScript = document.currentScript;

@@ -1,3 +1,4 @@
+"use strict";
 var Mocho = (function(mod){
 	function getLastScript(){
 		var script = document.getElementsByTagName("script");

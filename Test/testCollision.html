@@ -113,7 +113,7 @@
 						else
 							ctx.fillStyle="green";
 						
-						ctx.fillRect(player.x,player.y,player.w,player.h);
+						ctx.fillRect(Math.floor(player.x),Math.floor(player.y),Math.floor(player.w),Math.floor(player.h));
 						
 						walls.forEach(function(each){
 							if(each.collided)

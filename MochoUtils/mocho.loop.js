@@ -1,3 +1,4 @@
+"use strict";
 var Mocho = (function(mod){
 	//Clock class
 	function Clock(){
